@@ -18,21 +18,27 @@ spec:
     Master:
       count: 1
       resources:
+        rdma: # new
+          # list of network devices to mount on the container
+          devices: ["sriov_a", "sriov_b","sriov_c", "sriov_d"]
         cpus: 8
         ramRatio: 4
         accelerators: # optional
           gpu:
             count: 1
             type: gpu
-            product: nvidia-tesla-t4
+            product: NVIDIA-H100-80GB-HBM3
     Worker:
       count: 1
       resources:
+        rdma: # new
+          # list of network devices to mount on the container
+          devices: ["sriov_a", "sriov_b","sriov_c", "sriov_d"]
         cpus: 8
         ramRatio: 4
         accelerators: # optional
           gpu:
             count: 1
             type: gpu
-            product: nvidia-tesla-t4
+            product: NVIDIA-H100-80GB-HBM3
  
