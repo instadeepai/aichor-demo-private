@@ -3,13 +3,13 @@ apiVersion: 0.2.2
 
 builder:
   image: image
-  context: pytorch-demo
   dockerfile: ./Dockerfile
+  context: .
 
 spec:
   operator: pytorch
   image: image
-  command: "python3 src/main.py"
+  command: "torchrun --nproc_per_node 1 main.py --mixed_precision bf16 --batch_size 105 --num_epochs 200" # --num_processes=={Number of GPUs}
 
   tensorboard:
     enabled: true
@@ -18,12 +18,16 @@ spec:
     Master:
       count: 1
       resources:
-        rdma: # new
-          # list of network devices to mount on the container
-          devices: ["sriov_a", "sriov_b","sriov_c", "sriov_d"]
-        cpus: 8
+        cpus: 16
         ramRatio: 4
-        accelerators: # optional
+        extraTolerations:
+          - effect: NoSchedule
+            key: node.kubernetes.io/unschedulable
+            operator: Exists
+        rdma: # new
+         # list of network devices to mount on the container
+         devices: ["sriov_a", "sriov_b", "sriov_c", "sriov_d"]
+        accelerators:
           gpu:
             count: 1
             type: gpu
@@ -31,14 +35,18 @@ spec:
     Worker:
       count: 1
       resources:
+        cpus: 16
+        ramRatio: 1
+        extraTolerations:
+          - effect: NoSchedule
+            key: node.kubernetes.io/unschedulable
+            operator: Exists
         rdma: # new
-          # list of network devices to mount on the container
-          devices: ["sriov_a", "sriov_b","sriov_c", "sriov_d"]
-        cpus: 8
-        ramRatio: 4
-        accelerators: # optional
+         # list of network devices to mount on the container
+         devices: ["sriov_a", "sriov_b", "sriov_c", "sriov_d"]
+        accelerators:
           gpu:
             count: 1
             type: gpu
             product: NVIDIA-H100-80GB-HBM3
- 
+
