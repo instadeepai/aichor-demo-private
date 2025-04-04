@@ -23,7 +23,7 @@ spec:
         extraTolerations:
           - effect: NoSchedule
             key: node.kubernetes.io/unschedulable
-            operator: Exists
+            operator: Exists 
         rdma: # new
          # list of network devices to mount on the container
          devices: ["sriov_a", "sriov_b", "sriov_c", "sriov_d"]
