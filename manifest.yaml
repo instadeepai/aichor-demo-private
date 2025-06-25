@@ -20,9 +20,6 @@ spec:
       resources:
         cpus: 16
         ramRatio: 2
-        rdma: # new
-         # list of network devices to mount on the container
-         devices: ["sriov_a", "sriov_b", "sriov_c", "sriov_d"]
         accelerators:
           gpu:
             count: 1
@@ -33,9 +30,6 @@ spec:
       resources:
         cpus: 16
         ramRatio: 1
-        rdma: # new
-         # list of network devices to mount on the container
-         devices: ["sriov_a", "sriov_b", "sriov_c", "sriov_d"]
         accelerators:
           gpu:
             count: 1
